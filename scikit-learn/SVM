@@ -1,0 +1,32 @@
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC
+f=open("/Users/Yu/Downloads/covtype.data")
+result=[]
+classify=[]
+test=[]
+classify2=[]
+j=0
+
+for i in range(0,2000):
+    temp2=f.readline()
+    temp2=map(int,temp2.split(','))
+    test+=[temp2]
+    classify2.append(test[i][-1])
+    del test[i][-1]
+for i in range(0,20000):
+    temp=f.readline()
+    temp=map(int,temp.split(','))
+    result+=[temp]
+    classify.append(result[i][-1])
+    del result[i][-1]
+clf = SVC()
+clf.fit(result, classify)
+predict=clf.predict(test)
+count=0.00
+for i in range(0,2000):
+    if predict[i] == classify2[i]:
+        count += 1
+print count
+
