@@ -1,0 +1,13 @@
+class Solution(object):
+    def missingNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        ma=max(nums)
+        mi=min(nums)
+        if mi!=0:return 0
+        s=sum(nums)
+        temp=(mi+ma)*(ma-mi+1)/2-s
+        if temp==0:return ma+1
+        else:return temp
