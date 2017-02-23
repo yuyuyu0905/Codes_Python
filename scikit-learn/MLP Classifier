@@ -1,0 +1,48 @@
+from sklearn.neural_network import MLPClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+
+f=open("/Users/Yu/Downloads/covtype.data")
+result=[]
+classify=[]
+test=[]
+classify2=[]
+j=0
+
+for i in range(0,2000):
+    temp2=f.readline()
+    temp2=map(int,temp2.split(','))
+    test+=[temp2]
+    classify2.append(test[i][-1])
+    del test[i][-1]
+for i in range(0,):
+    temp=f.readline()
+    temp=map(int,temp.split(','))
+    result+=[temp]
+    classify.append(result[i][-1])
+    del result[i][-1]
+clf = MLPClassifier(activation='relu',solver='adam',hidden_layer_sizes=(80,60), random_state=1,batch_size=800)
+clf.fit(result,classify)
+predict=clf.predict(test)
+knnclf = KNeighborsClassifier(n_neighbors=2,weights='distance')
+knnclf.fit(result,classify)
+knnpredict=knnclf.predict(test)
+nbclf = GaussianNB()
+nbclf.fit(result,classify)
+nbpredict=nbclf.predict(test)
+
+count=0.00
+nbcount=0.00
+knncount=0.00
+for i in range(0,2000):
+    if predict[i] == classify2[i]:
+        count += 1
+    if nbpredict[i]==classify2[i]:
+        nbcount += 1
+    if knnpredict[i]==classify2[i]:
+        knncount += 1
+
+print count/2000
+print nbcount/2000
+print knncount/2000
+
