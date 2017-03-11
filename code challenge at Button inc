@@ -1,0 +1,47 @@
+#Rules of the game
+#- You have a standard deck of 52 cards facing down
+#- You can only draw one card at a time
+#- For each black card you draw, you earn $1
+#- For each red card you draw, you lose $1
+#- You may choose to stop drawing cards at any time and walk away with your cumulative winnings
+#Please include documentation about how to run your code and how you reached your solution.
+
+
+
+class Solution(object):
+    def draw_cards(self,card,black,dict):
+        if black>26 or card-black>26:return 'Invalid input'
+        if (card,black) in dict:return dict[card,black]
+        deck_black = float(26-black)
+        deck_red = float(26-card+black)
+        deck=52-card
+        if deck_black == 0: return 2*black-card
+        if deck_red == 0: return 0
+        while True:
+            draw_red=self.draw_cards(card+1,black,dict)
+            draw_black=self.draw_cards(card+1,black+1,dict)
+            if draw_red>2*black-(card+1): dict[(card+1,black)]=draw_red
+            else: dict[(card+1,black)]=2*black-(card+1)
+            if draw_black>2*(black+1)-(card+1): dict[(card+1,black+1)]=draw_black
+            else: dict[(card+1,black+1)]=2*(black+1)-(card+1)
+            draw_red=(deck_red/deck)*self.draw_cards(card+1,black,dict)
+            draw_black=(deck_black/deck)*self.draw_cards(card+1,black+1,dict)
+            if (draw_black+draw_red)>2*black-card:
+                select=1
+            else:
+                select=0
+            if select==1:return draw_black+draw_red
+            else:return 2*black-card
+
+
+    def draw_select(self,card,black,result):
+        if result==2*black-card:
+            return 'You should not draw any cards'
+        else:
+            return 'You should continue to draw cards'
+
+a=Solution()
+card2,black2=0,0
+result=a.draw_cards(card2,black2,{}) #a.draw_cards(# of deck,# of black card,empty dictionary)
+print result
+print a.draw_select(card2,black2,result)
