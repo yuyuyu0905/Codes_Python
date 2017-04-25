@@ -1,0 +1,9 @@
+version: spark-1.6.1-bin-hadoop2.4
+
+command line:
+
+/Users/Yu/Desktop/Yu_Ru_betweenness.py /Users/Yu/Downloads/ml-latest-small/ratings.csv /Users/Yu/Desktop/betweenness.txt
+
+
+/Users/Yu/Desktop/Yu_Ru_community.py /Users/Yu/Downloads/ml-latest-small/ratings.csv /Users/Yu/Desktop/communities.txt
+
