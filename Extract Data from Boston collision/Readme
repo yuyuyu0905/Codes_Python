@@ -1,0 +1,8 @@
+The file 'result','result2','result3' are results for data scrape, data cleaning 1, data cleaning 2 respectively.
+
+To run the code, you need to have selenium and PhantomJS on your host. 
+
+The purpose is to extract data from the site: http://app01.cityofboston.gov/VisionZero/ 
+
+The site get the data from the original site: http://gpd01.cityofboston.gov:6080/arcgis/rest/services/
+
