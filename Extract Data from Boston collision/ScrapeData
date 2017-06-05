@@ -1,0 +1,28 @@
+from selenium import webdriver
+import csv
+
+#get the website
+#To use this script, you have to install PhantomJS at the 'executable_path'
+#My path is '/Users/Yu/Downloads/phantomjs-2.1.1-macosx/bin/phantomjs'
+driver=webdriver.PhantomJS(executable_path='/Users/Yu/Downloads/phantomjs-2.1.1-macosx/bin/phantomjs')
+f = open('/Users/Yu/Desktop/result.csv', 'wb')
+w = csv.writer(f)
+w.writerow(['FID','Shape','Incident','Time','Mode','Count','X','Y','Spatial References'])
+for i in range(18,30):
+    driver.get('http://gpd01.cityofboston.gov:6080/arcgis/rest/services/all_injuries_monthly/MapServer/find')
+    driver.find_element_by_name('layers').send_keys(str(i))
+    driver.find_element_by_name('searchText').send_keys('0')
+    driver.find_element_by_tag_name('form').submit()
+    s = driver.find_element_by_xpath('*').text
+    s = str(s)
+    s = s.split('\n')
+    s = s[22:]
+    s = map(lambda x: x.split(': '), s)
+    s = filter(lambda x: len(x) >= 2, s)
+    s = map(lambda x: x[1], s)
+    ss = [0 for i in range(len(s) / 9)]
+    print 'writing',len(s)/9,'rows...'
+    for i in range(len(s) / 9):
+        ss[i] = s[9 * i:9 * i + 9]
+    from bs4 import BeautifulSoup
+    w.writerows(ss)
