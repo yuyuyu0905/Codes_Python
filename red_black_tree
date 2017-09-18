@@ -1,0 +1,117 @@
+class RedBlueTree:
+    def __init__(self):
+        self.root = None
+
+
+class RedBlueTreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+        self.parent = None
+        self.color = 'b'
+
+    def inorder(self, node):
+        if not node:
+            return
+        self.inorder(node.left)
+        if not node.parent:
+            parent_val ='None'
+        else:
+            parent_val = node.parent.val
+        print 'key:', node.val, 'parent:', parent_val, 'color:', node.color
+        self.inorder(node.right)
+
+    def rbinsert(self, rbTree, node):
+        current = None
+        current_node = rbTree.root
+        node.color = 'r'
+        if not current_node:
+            rbTree.root = node
+            rbTree.root.color = 'b'
+            return
+        while current_node:
+            current = current_node
+            if node.val < current_node.val:
+                current_node = current_node.left
+            else:
+                current_node = current_node.right
+        if node.val < current.val:
+            current.left = node
+        else:
+            current.right = node
+        node.parent = current
+        self.insert_fix(rbTree, node)
+
+    def insert_fix(self, rbTree, node):
+        while node.parent and node.parent.color == 'r':
+            # check node's parent and uncle's l/r
+            if node.parent == node.parent.parent.left:
+                uncle_node = node.parent.parent.right
+                if uncle_node and uncle_node.color == 'r':
+                    node.parent.color = 'b'
+                    uncle_node.color = 'b'
+                    node.parent.parent.color = 'r'
+                    node = node.parent.parent
+                else:
+                    if node == node.parent.right:
+                        node = node.parent
+                        self.left_rotate(rbTree, node)
+                    node.parent.color = 'b'
+                    node.parent.parent.color = 'r'
+                    self.right_rotate(rbTree, node.parent.parent)
+            else:
+                uncle_node = node.parent.parent.left
+                if uncle_node and uncle_node.color == 'r':
+                    node.parent.color = 'b'
+                    uncle_node.color = 'b'
+                    node.parent.parent.color = 'r'
+                    node = node.parent.parent
+                else:
+                    if node == node.parent.left:
+                        node = node.parent
+                        self.right_rotate(rbTree, node)
+                    node.parent.color = 'b'
+                    node.parent.parent.color = 'r'
+                    self.left_rotate(rbTree, node.parent.parent)
+        rbTree.root.color = 'b'
+
+    def right_rotate(self, rbTree, node):
+        print 'right'
+        node_left = node.left
+        node.left = node_left.right
+        if node_left.right:
+            node_left.right.parent = node
+        node_left.parent = node.parent
+        if not node.parent:
+            rbTree.root = node_left
+        elif node == node.parent.right:
+            node.parent.right = node_left
+        else:
+            node.parent.left = node_left
+        node_left.right = node
+        node.parent = node_left
+
+    def left_rotate(self, rbTree, node):
+        print 'left'
+        node_right = node.right
+        node.right = node_right.left
+        if node_right.left:
+            node_right.left.parent = node
+        node_right.parent = node.parent
+        if not node.parent:
+            rbTree.root = node_right
+        elif node == node.parent.right:
+            node.parent.right = node_right
+        else:
+            node.parent.left = node_right
+        node_right.left = node
+        node.parent = node_right
+
+tree = RedBlueTree()
+treenode = RedBlueTreeNode(0)
+for i in range(1, 10):
+    print 'i:-------------------', i
+    treenode_insert = RedBlueTreeNode(i)
+    treenode.rbinsert(tree, treenode_insert)
+    treenode.inorder(tree.root)
